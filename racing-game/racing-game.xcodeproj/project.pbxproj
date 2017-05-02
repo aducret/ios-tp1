@@ -11,7 +11,13 @@
 		46759D441EB393280042580D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 46759D421EB393280042580D /* Main.storyboard */; };
 		46759D461EB393290042580D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46759D451EB393290042580D /* Assets.xcassets */; };
 		46759D491EB393290042580D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 46759D471EB393290042580D /* LaunchScreen.storyboard */; };
-		46759D511EB397920042580D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46759D501EB397920042580D /* ViewController.swift */; };
+		46C503F81EB8C53500554FF0 /* MainScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 46C503F71EB8C53500554FF0 /* MainScene.sks */; };
+		46C503FB1EB8C98200554FF0 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C503FA1EB8C98200554FF0 /* MainViewController.swift */; };
+		46C503FD1EB8C99400554FF0 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C503FC1EB8C99400554FF0 /* PlayerNode.swift */; };
+		46C503FF1EB8C9FF00554FF0 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C503FE1EB8C9FF00554FF0 /* MainScene.swift */; };
+		46C504031EB8CB8000554FF0 /* SKNodeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C504021EB8CB8000554FF0 /* SKNodeExtension.swift */; };
+		46C504061EB8CC0400554FF0 /* Identifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C504051EB8CC0400554FF0 /* Identifiers.swift */; };
+		46C504081EB8CFA300554FF0 /* LaneStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C504071EB8CFA300554FF0 /* LaneStateMachine.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,7 +27,13 @@
 		46759D451EB393290042580D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		46759D481EB393290042580D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		46759D4A1EB393290042580D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		46759D501EB397920042580D /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		46C503F71EB8C53500554FF0 /* MainScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainScene.sks; sourceTree = "<group>"; };
+		46C503FA1EB8C98200554FF0 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		46C503FC1EB8C99400554FF0 /* PlayerNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
+		46C503FE1EB8C9FF00554FF0 /* MainScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScene.swift; sourceTree = "<group>"; };
+		46C504021EB8CB8000554FF0 /* SKNodeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKNodeExtension.swift; sourceTree = "<group>"; };
+		46C504051EB8CC0400554FF0 /* Identifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiers.swift; sourceTree = "<group>"; };
+		46C504071EB8CFA300554FF0 /* LaneStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaneStateMachine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +66,10 @@
 		46759D371EB393280042580D /* racing-game */ = {
 			isa = PBXGroup;
 			children = (
-				46759D501EB397920042580D /* ViewController.swift */,
+				46C504011EB8CB7800554FF0 /* Extensions */,
+				46C503F91EB8C97000554FF0 /* Components */,
+				46C503F61EB8C4F900554FF0 /* Scenes */,
+				46C504041EB8CBF900554FF0 /* SupportingFiles */,
 				46759D381EB393280042580D /* AppDelegate.swift */,
 				46759D421EB393280042580D /* Main.storyboard */,
 				46759D451EB393290042580D /* Assets.xcassets */,
@@ -62,6 +77,42 @@
 				46759D4A1EB393290042580D /* Info.plist */,
 			);
 			path = "racing-game";
+			sourceTree = "<group>";
+		};
+		46C503F61EB8C4F900554FF0 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				46C503F71EB8C53500554FF0 /* MainScene.sks */,
+			);
+			name = Scenes;
+			path = scenes;
+			sourceTree = "<group>";
+		};
+		46C503F91EB8C97000554FF0 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				46C503FA1EB8C98200554FF0 /* MainViewController.swift */,
+				46C503FE1EB8C9FF00554FF0 /* MainScene.swift */,
+				46C503FC1EB8C99400554FF0 /* PlayerNode.swift */,
+				46C504071EB8CFA300554FF0 /* LaneStateMachine.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		46C504011EB8CB7800554FF0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				46C504021EB8CB8000554FF0 /* SKNodeExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		46C504041EB8CBF900554FF0 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				46C504051EB8CC0400554FF0 /* Identifiers.swift */,
+			);
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,6 +178,7 @@
 				46759D441EB393280042580D /* Main.storyboard in Resources */,
 				46759D461EB393290042580D /* Assets.xcassets in Resources */,
 				46759D491EB393290042580D /* LaunchScreen.storyboard in Resources */,
+				46C503F81EB8C53500554FF0 /* MainScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +189,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46759D511EB397920042580D /* ViewController.swift in Sources */,
+				46C503FB1EB8C98200554FF0 /* MainViewController.swift in Sources */,
+				46C504081EB8CFA300554FF0 /* LaneStateMachine.swift in Sources */,
+				46C503FF1EB8C9FF00554FF0 /* MainScene.swift in Sources */,
 				46759D391EB393280042580D /* AppDelegate.swift in Sources */,
+				46C504031EB8CB8000554FF0 /* SKNodeExtension.swift in Sources */,
+				46C504061EB8CC0400554FF0 /* Identifiers.swift in Sources */,
+				46C503FD1EB8C99400554FF0 /* PlayerNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +361,7 @@
 				46759D4F1EB393290042580D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
