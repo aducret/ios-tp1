@@ -11,51 +11,20 @@ import UIKit
 
 class PlayerNode: SKSpriteNode {
     
-    var leftConstraint: SKConstraint!
-    var middleConstraint: SKConstraint!
-    var rightConstraint: SKConstraint!
+    init(imageNamed: String) {
+        let texture = SKTexture(imageNamed: imageNamed)
+        super.init(texture: texture, color: .clear, size: texture.size())
+        physicsBody = SKPhysicsBody(rectangleOf: texture.size())
+    }
     
-    func moveInDirection(direction: ButtonDirection, toLane lane: LaneState) {
-        disableAllConstraints()
-        
-        let changeInX = (direction == .Left) ? -70.0 : 70.0
-        let rotation = (direction == .Left) ? Double.pi / 4.0 : -Double.pi / 4.0
-        
-        let duration = 0.5
-        let moveAction = SKAction.moveBy(x: CGFloat(changeInX), y: 0.0, duration: duration)
-        let rotateAction = SKAction.rotate(byAngle: CGFloat(rotation), duration: duration / 2.0)
-        rotateAction.timingMode = .easeInEaseOut
-        let rotateSequence = SKAction.sequence([rotateAction, rotateAction.reversed()])
-        let moveGroup = SKAction.group([moveAction, rotateSequence])
-        
-        let completion = SKAction.run { () -> Void in
-            switch lane {
-            case is LeftLane:
-                self.leftConstraint.enabled = true
-            case is MiddleLane:
-                self.middleConstraint.enabled = true
-            case is RightLane:
-                self.rightConstraint.enabled = true
-            default:
-                print("Warning - This should never happen: \(lane)")
-                break
-            }
-        }
-        
-        let sequenceAction = SKAction.sequence([moveGroup, completion])
-        run(sequenceAction)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }
 
 // MARK: - Private Methods
 fileprivate extension PlayerNode {
-    
-    fileprivate func disableAllConstraints() {
-        leftConstraint.enabled = false
-        middleConstraint.enabled = false
-        rightConstraint.enabled = false
-    }
     
 }
 

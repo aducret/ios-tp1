@@ -9,56 +9,41 @@
 import UIKit
 import SpriteKit
 
-enum ButtonDirection: Int {
+enum Direction: Int {
     case Left = 0, Right = 1
 }
 
 class MainViewController: UIViewController {
-
-    var stateMachine: LaneStateMachine!
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    override var shouldAutorotate: Bool {
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let skView = SKView(frame: view.frame)
-        let scene = MainScene(fileNamed: SceneIdentifier.main.rawValue)!
+        let skView = SKView(frame: view.bounds)
+        skView.ignoresSiblingOrder = true
+        
+        // TODO: Check if we are in debug mode
+        if true {
+            skView.showsFPS = true
+            skView.showsNodeCount = true
+        }
+        
+        let scene = MainScene(size: view.bounds.size)
+        scene.scaleMode = .resizeFill
         skView.presentScene(scene)
+        
         view.insertSubview(skView, at: 0)
-        
-        let left = LeftLane(player: scene.player)
-        let middle = MiddleLane(player: scene.player)
-        let right = RightLane(player: scene.player)
-        
-        stateMachine = LaneStateMachine(states: [left, middle, right])
-        stateMachine.enter(MiddleLane.self)
     }
     
     @IBAction func didPressButton(_ sender: AnyObject) {
-        switch sender.tag {
-            
-        case ButtonDirection.Left.rawValue:
-            switch stateMachine.currentState {
-            case is RightLane:
-                stateMachine.enter(MiddleLane.self)
-            case is MiddleLane:
-                stateMachine.enter(LeftLane.self)
-            default:
-                break
-            }
-            
-        case ButtonDirection.Right.rawValue:
-            switch stateMachine.currentState {
-            case is LeftLane:
-                stateMachine.enter(MiddleLane.self)
-            case is MiddleLane:
-                stateMachine.enter(RightLane.self)
-            default:
-                break
-            }
-            
-        default:
-            break
-        }
+    
     }
     
 }
