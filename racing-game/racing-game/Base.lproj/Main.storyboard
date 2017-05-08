@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,14 +22,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tj3-wj-cfm">
-                                <rect key="frame" x="16" y="597" width="50" height="50"/>
+                                <rect key="frame" x="102" y="597" width="50" height="50"/>
                                 <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="cFS-ew-SCQ"/>
                                     <constraint firstAttribute="width" constant="50" id="jT1-rB-bNh"/>
                                 </constraints>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="Left Arrow">
+                                <state key="normal" image="Arrow-Left">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -38,27 +37,61 @@
                                 </connections>
                             </button>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V5X-R9-Pqo">
-                                <rect key="frame" x="309" y="597" width="50" height="50"/>
+                                <rect key="frame" x="222" y="597" width="50" height="50"/>
                                 <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="Vk3-dz-YSy"/>
                                     <constraint firstAttribute="height" constant="50" id="Y0c-Wj-nNF"/>
                                 </constraints>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="Right Arrow">
+                                <state key="normal" image="Arrow-Right">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="didPressButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="q6W-hF-MI0"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MiA-uV-prG">
+                                <rect key="frame" x="162" y="542" width="50" height="50"/>
+                                <color key="backgroundColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="Nop-AO-Xpi"/>
+                                    <constraint firstAttribute="height" constant="50" id="zsM-Ji-P0Y"/>
+                                </constraints>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="Arrow-Up">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="didPressButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NX5-Gx-QXz"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xn2-7i-Ei3">
+                                <rect key="frame" x="162" y="597" width="50" height="50"/>
+                                <color key="backgroundColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="TxO-jd-NCK"/>
+                                    <constraint firstAttribute="width" constant="50" id="tkV-wq-Sfi"/>
+                                </constraints>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="Arrow-Down">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="didPressButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aCc-20-Xr1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Xn2-7i-Ei3" firstAttribute="leading" secondItem="tj3-wj-cfm" secondAttribute="trailing" constant="10" id="AOy-rL-ecK"/>
+                            <constraint firstItem="Xn2-7i-Ei3" firstAttribute="top" secondItem="MiA-uV-prG" secondAttribute="bottom" constant="5" id="BaI-Eo-rFf"/>
+                            <constraint firstItem="V5X-R9-Pqo" firstAttribute="leading" secondItem="Xn2-7i-Ei3" secondAttribute="trailing" constant="10" id="EqF-ER-r6x"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="V5X-R9-Pqo" secondAttribute="bottom" constant="20" id="MjI-QL-c9e"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="tj3-wj-cfm" secondAttribute="bottom" constant="20" id="NnL-3b-o6O"/>
-                            <constraint firstItem="tj3-wj-cfm" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="gzW-O3-CMa"/>
-                            <constraint firstItem="V5X-R9-Pqo" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="tlj-PD-icN"/>
+                            <constraint firstItem="Xn2-7i-Ei3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="VjW-wq-p45"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Xn2-7i-Ei3" secondAttribute="bottom" constant="20" id="giQ-9s-kdY"/>
+                            <constraint firstItem="MiA-uV-prG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qwE-7v-Rvj"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -67,7 +100,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Left Arrow" width="40" height="40"/>
-        <image name="Right Arrow" width="40" height="40"/>
+        <image name="Arrow-Down" width="40" height="40"/>
+        <image name="Arrow-Left" width="40" height="40"/>
+        <image name="Arrow-Right" width="40" height="40"/>
+        <image name="Arrow-Up" width="40" height="40"/>
     </resources>
 </document>

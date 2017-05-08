@@ -9,33 +9,34 @@
 import UIKit
 import SpriteKit
 
-enum Direction: Int {
-    case Left = 0, Right = 1
+public enum Direction: Int {
+    case left = 0
+    case right = 1
+    case down = 2
+    case up = 3
 }
 
-class MainViewController: UIViewController {
+public class MainViewController: UIViewController {
     
-    override var prefersStatusBarHidden: Bool {
+    fileprivate var scene: MainScene!
+    
+    public override var prefersStatusBarHidden: Bool {
         return true
     }
     
-    override var shouldAutorotate: Bool {
+    public override var shouldAutorotate: Bool {
         return true
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         let skView = SKView(frame: view.bounds)
         skView.ignoresSiblingOrder = true
+        skView.showsFPS = true
+        skView.showsNodeCount = true
         
-        // TODO: Check if we are in debug mode
-        if true {
-            skView.showsFPS = true
-            skView.showsNodeCount = true
-        }
-        
-        let scene = MainScene(size: view.bounds.size)
+        scene = MainScene(size: view.bounds.size)
         scene.scaleMode = .resizeFill
         skView.presentScene(scene)
         
@@ -43,7 +44,10 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func didPressButton(_ sender: AnyObject) {
-    
+        guard let tag = sender.tag else { return }
+        guard let direction = Direction(rawValue: tag) else { return }
+        
+        scene.direction = direction
     }
     
 }

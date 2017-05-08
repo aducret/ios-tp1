@@ -9,32 +9,43 @@
 import SpriteKit
 import UIKit
 import GameplayKit
+import Foundation
 
-class MainScene: SKScene, SKPhysicsContactDelegate {
+public class MainScene: SKScene, SKPhysicsContactDelegate {
     
-    var player = PlayerNode(imageNamed: "Car")
+    public let tire = Tire(texture: nil, color: .brown, size: CGSize(width: 10, height: 20))
+    public var direction: Direction? = .none
     
-    override func didMove(to view: SKView) {
+    fileprivate let mainCamera = SKCameraNode()
+    
+    public override func didMove(to view: SKView) {
         super.didMove(to: view)
 
         initializeScene(view)
         configureWorld()
         
-        player.position = CGPoint(x: 0, y: 0)
-        player.position = CGPoint(x: size.width * 0.5, y: size.height * 0.25)
-        player.xScale = 0.3
-        player.yScale = 0.3
+//        self.camera = mainCamera
         
-        addChild(player)
+        addPlayer()
     }
     
-    override func update(_ currentTime: TimeInterval) {
+    public override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
         
-        player.physicsBody!.velocity = CGVector(dx: 0, dy: 5)
+        tire.updateFriction()
+        if let direction = direction {
+            tire.updateTurn(direction: direction)
+            tire.updateDrive(direction: direction)
+        }
+        direction = .none
     }
     
-    func didBegin(_ contact: SKPhysicsContact) {
+    public override func didFinishUpdate() {
+        super.didFinishUpdate()
+        updateCamera()
+    }
+    
+    public func didBegin(_ contact: SKPhysicsContact) {
         
     }
     
@@ -43,14 +54,26 @@ class MainScene: SKScene, SKPhysicsContactDelegate {
 // MARK: - Private Methods
 fileprivate extension MainScene {
     
-    func configureWorld() {
+    fileprivate func configureWorld() {
         physicsWorld.gravity = CGVector.zero
         physicsWorld.contactDelegate = self
     }
     
-    func initializeScene(_ view: SKView) {
+    fileprivate func initializeScene(_ view: SKView) {
         size = view.frame.size
-        backgroundColor = .white
+        backgroundColor = .black
+    }
+    
+    fileprivate func addPlayer() {
+        tire.position = CGPoint(x: size.width * 0.5, y: size.height * 0.25)
+        addChild(tire)
+    }
+    
+    fileprivate func updateCamera() {
+        let carFrame = tire.calculateAccumulatedFrame()
+        let cameraPositionX = carFrame.origin.x + carFrame.width / 2
+        let cameraPositiony = carFrame.origin.y + carFrame.height / 2
+        camera?.position = CGPoint(x: cameraPositionX, y: cameraPositiony)
     }
     
 }
