@@ -28,14 +28,14 @@ public class Tire: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func updateDrive(direction: Direction) {
+    public func updateDrive(direction: UInt32) {
         guard let physicsBody = physicsBody else { return }
         
         let desiredSpeed: CGFloat
-        switch direction {
-        case .up:
+        switch direction & (Direction.up.rawValue | Direction.down.rawValue) {
+        case Direction.up.rawValue:
             desiredSpeed = maxForwardSpeed
-        case .down:
+        case Direction.down.rawValue:
             desiredSpeed = maxBackwardSpeed
         default:
             return
@@ -43,29 +43,28 @@ public class Tire: SKSpriteNode {
         
         let currentForwardNormal = getFowardDirection()
         let currentSpeed = getForwardVelocity().dot(currentForwardNormal)
-        var force: CGFloat = 0.0
         
-        if (desiredSpeed > currentSpeed) {
+        let force: CGFloat
+        if currentSpeed < desiredSpeed {
             force = maxDriveForce
-        } else if (desiredSpeed < currentSpeed) {
+        } else if (currentSpeed > desiredSpeed) {
             force = -maxDriveForce
         } else {
             return
         }
         
-        let dx = currentForwardNormal.dx * force
-        let dy = currentForwardNormal.dy * force
-        physicsBody.applyForce(CGVector(dx: dx, dy: dy))
+        let a = currentForwardNormal.scale(force)
+        physicsBody.applyForce(a)
     }
     
-    public func updateTurn(direction: Direction) {
+    public func updateTurn(direction: UInt32) {
         guard let physicsBody = physicsBody else { return }
         
         let desiredTorque: CGFloat
-        switch direction {
-        case .left:
+        switch direction & (Direction.left.rawValue | Direction.right.rawValue) {
+        case Direction.left.rawValue:
             desiredTorque = 1
-        case .right:
+        case Direction.right.rawValue:
             desiredTorque = -1
         default:
             return
@@ -78,12 +77,12 @@ public class Tire: SKSpriteNode {
         
         let impulse = getLateralVelocity().scale(-physicsBody.mass)
         physicsBody.applyImpulse(impulse)
-        
+
         let angularImpulse = -0.1 * physicsBody.angularDamping * physicsBody.angularVelocity
         physicsBody.applyAngularImpulse(angularImpulse)
         
         let forwardVelocity = getForwardVelocity()
-        let forwardSpeed = getLateralDirection().module()
+        let forwardSpeed = forwardVelocity.module()
         let dragMagnitude = -2 * forwardSpeed
         let drag = forwardVelocity.scale(dragMagnitude)
         physicsBody.applyForce(drag)
@@ -96,7 +95,7 @@ fileprivate extension Tire {
 
     fileprivate func configurePhysicsBody(with size: CGSize) {
         physicsBody = SKPhysicsBody(rectangleOf: size)
-        physicsBody?.mass = 20
+        physicsBody?.mass = 5
         physicsBody?.isDynamic = true
         physicsBody?.affectedByGravity = false
     }
@@ -104,19 +103,17 @@ fileprivate extension Tire {
     fileprivate func getForwardVelocity() -> CGVector {
         guard let velocity = physicsBody?.velocity else { return CGVector(dx: 0, dy: 0) }
         
-        let normal = getFowardDirection().normalized()
-        let dx = normal.dx * velocity.dot(normal)
-        let dy = normal.dy * velocity.dot(normal)
-        return CGVector(dx: dx, dy: dy)
+        let forwardDirection = getFowardDirection().normalized()
+        let forwardSpeed = velocity.dot(forwardDirection)
+        return forwardDirection.scale(forwardSpeed)
     }
     
     fileprivate func getLateralVelocity() -> CGVector {
         guard let velocity = physicsBody?.velocity else { return CGVector(dx: 0, dy: 0) }
         
-        let normal = getLateralDirection().normalized()
-        let dx = normal.dx * velocity.dot(normal)
-        let dy = normal.dy * velocity.dot(normal)
-        return CGVector(dx: dx, dy: dy)
+        let lateralDirection = getLateralDirection().normalized()
+        let lateralSpeed = velocity.dot(lateralDirection)
+        return lateralDirection.scale(lateralSpeed)
     }
     
     fileprivate func getLateralDirection() -> CGVector {

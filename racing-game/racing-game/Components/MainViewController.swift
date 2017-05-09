@@ -9,11 +9,13 @@
 import UIKit
 import SpriteKit
 
-public enum Direction: Int {
-    case left = 0
-    case right = 1
-    case down = 2
-    case up = 3
+public enum Direction: UInt32 {
+    
+    case left = 0x1
+    case right = 0x2
+    case down = 0x4
+    case up = 0x8
+    
 }
 
 public class MainViewController: UIViewController {
@@ -41,13 +43,6 @@ public class MainViewController: UIViewController {
         skView.presentScene(scene)
         
         view.insertSubview(skView, at: 0)
-    }
-    
-    @IBAction func didPressButton(_ sender: AnyObject) {
-        guard let tag = sender.tag else { return }
-        guard let direction = Direction(rawValue: tag) else { return }
-        
-        scene.direction = direction
     }
     
 }
