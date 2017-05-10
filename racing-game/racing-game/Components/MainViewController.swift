@@ -18,6 +18,15 @@ public enum Direction: UInt32 {
     
 }
 
+public enum Directions: String {
+    
+    case left = "left"
+    case right = "right"
+    case down = "down"
+    case up = "up"
+    
+}
+
 public class MainViewController: UIViewController {
     
     fileprivate var scene: MainScene!

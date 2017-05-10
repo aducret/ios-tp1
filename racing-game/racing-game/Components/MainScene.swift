@@ -15,8 +15,8 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
     
     public let tire = Tire(texture: nil, color: .brown, size: CGSize(width: 10, height: 20))
     
-    fileprivate let mainCamera = SKCameraNode()
     fileprivate var direction: UInt32 = 0
+    fileprivate var directions: Directions? = .none
     
     fileprivate var leftButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Left"), size: CGSize(width: 40, height: 40))
     fileprivate var rightButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Right"), size: CGSize(width: 40, height: 40))
@@ -29,10 +29,8 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
         initializeScene(view)
         configureWorld()
         
-        self.camera = mainCamera
-        addChild(mainCamera)
-        
         addPlayer()
+        addCamera()
         addControls()
     }
     
@@ -40,29 +38,33 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
         super.update(currentTime)
         
         tire.updateFriction()
-        tire.updateTurn(direction: direction)
-        tire.updateDrive(direction: direction)
+        if let direction = directions {
+            tire.updateTurn(direction: direction)
+            tire.updateDrive(direction: direction)
+        }
     }
     
     public override func didFinishUpdate() {
         super.didFinishUpdate()
-        updateCamera()
+//        updateCamera()
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let camera = camera else { return }
-        
         touches
-            .map { convert($0.location(in: self), to: camera) }
-            .forEach(updateDirectionWithTouchBegan)
+            .map { $0.location(in: self) }
+            .forEach {
+                // We subtract one to touchedNodes.count because the camera is always touched and we don't contemplate this case.
+                // We check if the touched node is only one direction button.
+                let touchedNodes = nodes(at: $0)
+                guard touchedNodes.count - 1 == 1 else { return }
+                guard let direction = Directions(rawValue: touchedNodes[0].name ?? "") else { return }
+                
+                directions = direction
+            }
     }
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let camera = camera else { return }
-        
-        touches
-            .map { convert($0.location(in: self), to: camera) }
-            .forEach(updateDirectionWithTouchEnded)
+        directions = .none
     }
     
     public func didBegin(_ contact: SKPhysicsContact) {
@@ -96,44 +98,30 @@ fileprivate extension MainScene {
         camera?.position = CGPoint(x: cameraPositionX, y: cameraPositiony)
     }
     
+    fileprivate func addCamera() {
+        let mainCamera = SKCameraNode()
+        camera = mainCamera
+        addChild(mainCamera)
+    }
+    
     fileprivate func addControls() {
         guard let camera = camera else { return }
         
         upButton.position = CGPoint(x: 0, y: -size.height / 2 + upButton.size.height / 2 + 35)
+        upButton.name = "up"
         camera.addChild(upButton)
         
         downButton.position = CGPoint(x: 0, y: -size.height / 2 + downButton.size.height / 2)
+        downButton.name = "down"
         camera.addChild(downButton)
         
         rightButton.position = CGPoint(x: rightButton.size.width / 2 + 25, y: -size.height / 2 + rightButton.size.height / 2)
+        rightButton.name = "right"
         camera.addChild(rightButton)
         
         leftButton.position = CGPoint(x: -leftButton.size.width / 2 - 25, y: -size.height / 2 + leftButton.size.height / 2)
+        leftButton.name = "left"
         camera.addChild(leftButton)
-    }
-    
-    fileprivate func updateDirectionWithTouchBegan(point: CGPoint) {
-        if upButton.contains(point) {
-            direction |= Direction.up.rawValue
-        } else if downButton.contains(point) {
-            direction |= Direction.down.rawValue
-        } else if rightButton.contains(point) {
-            direction |= Direction.right.rawValue
-        } else if leftButton.contains(point) {
-            direction |= Direction.left.rawValue
-        }
-    }
-    
-    fileprivate func updateDirectionWithTouchEnded(point: CGPoint) {
-        if upButton.contains(point) {
-            direction &= ~Direction.up.rawValue
-        } else if downButton.contains(point) {
-            direction &= ~Direction.down.rawValue
-        } else if rightButton.contains(point) {
-            direction &= ~Direction.right.rawValue
-        } else if leftButton.contains(point) {
-            direction &= ~Direction.left.rawValue
-        }
     }
     
 }
