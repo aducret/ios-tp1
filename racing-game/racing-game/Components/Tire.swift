@@ -17,22 +17,21 @@ public class Tire: SKSpriteNode {
     fileprivate let fowardDirection = CGVector(dx: 0, dy: 1)
     fileprivate let lateralDirection = CGVector(dx: 1, dy: 0)
     
-    fileprivate let maxForwardSpeed: CGFloat = 100
-    fileprivate let maxBackwardSpeed: CGFloat = -20
-    fileprivate let maxDriveForce: CGFloat = 150
+    fileprivate let maxForwardSpeed: CGFloat = 250
+    fileprivate let maxBackwardSpeed: CGFloat = -40
+    fileprivate let maxDriveForce: CGFloat = 300
     
     public override init(texture: SKTexture? = nil, color: UIColor, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
         
         configurePhysicsBody(with: frame.size)
-        configureAngleConstraint()
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func updateDrive(direction: Directions) {
+    public func updateDrive(direction: Direction) {
         guard let physicsBody = physicsBody else { return }
         
         let desiredSpeed: CGFloat
@@ -41,8 +40,6 @@ public class Tire: SKSpriteNode {
             desiredSpeed = maxForwardSpeed
         case .down:
             desiredSpeed = maxBackwardSpeed
-        default:
-            return
         }
         
         let currentForwardNormal = getFowardDirection()
@@ -57,20 +54,19 @@ public class Tire: SKSpriteNode {
             return
         }
 
-        physicsBody.applyForce(currentForwardNormal.scale(force))
+        physicsBody.applyForce(currentForwardNormal.scale(force * 10))
     }
     
-    public func updateTurn(direction: Directions) {
+    public func updateTurn(turn: Turn, parentRotation: CGFloat) {
         guard let physicsBody = physicsBody else { return }
-        
+        guard zRotation < parentRotation + CGFloat(45.degreesToRadians) && zRotation > parentRotation - CGFloat(45.degreesToRadians) else { return }
+    
         let desiredTorque: CGFloat
-        switch direction {
+        switch turn {
         case .left:
             desiredTorque = 1
         case .right:
             desiredTorque = -1
-        default:
-            return
         }
         
         physicsBody.applyTorque(desiredTorque)
@@ -100,7 +96,6 @@ fileprivate extension Tire {
     fileprivate func configurePhysicsBody(with size: CGSize) {
         physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.mass = 5
-        physicsBody?.isDynamic = true
         physicsBody?.affectedByGravity = false
     }
         
@@ -126,12 +121,6 @@ fileprivate extension Tire {
     
    fileprivate func getFowardDirection() -> CGVector {
         return fowardDirection.rotate(zRotation)
-    }
-    
-    fileprivate func configureAngleConstraint() {
-        let range = SKRange(lowerLimit: Tire.MinAngle.degreesToRadians, upperLimit: Tire.MaxAngle.degreesToRadians)
-        let rotationConstraint = SKConstraint.zRotation(range)
-        constraints = [rotationConstraint]
     }
     
 }

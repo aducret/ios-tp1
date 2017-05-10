@@ -13,19 +13,19 @@ import Foundation
 
 public class MainScene: SKScene, SKPhysicsContactDelegate {
     
-    public let tire = Tire(texture: nil, color: .brown, size: CGSize(width: 10, height: 20))
+    fileprivate let car = Car(color: .red)
     
-    fileprivate var direction: UInt32 = 0
-    fileprivate var directions: Directions? = .none
+    fileprivate var direction: Direction? = .none
+    fileprivate var turn: Turn? = .none
     
-    fileprivate var leftButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Left"), size: CGSize(width: 40, height: 40))
-    fileprivate var rightButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Right"), size: CGSize(width: 40, height: 40))
-    fileprivate var upButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Up"), size: CGSize(width: 40, height: 40))
-    fileprivate var downButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Down"), size: CGSize(width: 40, height: 40))
+    fileprivate let leftButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Left"), size: CGSize(width: 40, height: 40))
+    fileprivate let rightButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Right"), size: CGSize(width: 40, height: 40))
+    fileprivate let upButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Up"), size: CGSize(width: 40, height: 40))
+    fileprivate let downButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Down"), size: CGSize(width: 40, height: 40))
     
     public override func didMove(to view: SKView) {
         super.didMove(to: view)
-
+        
         initializeScene(view)
         configureWorld()
         
@@ -34,19 +34,22 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
         addControls()
     }
     
+    var a = 0
+    
     public override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
         
-        tire.updateFriction()
-        if let direction = directions {
-            tire.updateTurn(direction: direction)
-            tire.updateDrive(direction: direction)
+        if (a <= 10) {
+            a += 1
+            return
         }
+        
+        car.updatePhysics(direction: direction, turn: turn)
     }
     
     public override func didFinishUpdate() {
         super.didFinishUpdate()
-//        updateCamera()
+        updateCamera()
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -57,14 +60,20 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
                 // We check if the touched node is only one direction button.
                 let touchedNodes = nodes(at: $0)
                 guard touchedNodes.count - 1 == 1 else { return }
-                guard let direction = Directions(rawValue: touchedNodes[0].name ?? "") else { return }
                 
-                directions = direction
+                if let directionPressed = Direction(rawValue: touchedNodes[0].name ?? "") {
+                    direction = directionPressed
+                }
+                
+                if let turnPressed = Turn(rawValue: touchedNodes[0].name ?? "") {
+                    turn = turnPressed
+                }
             }
     }
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        directions = .none
+        direction = .none
+        turn = .none
     }
     
     public func didBegin(_ contact: SKPhysicsContact) {
@@ -87,12 +96,13 @@ fileprivate extension MainScene {
     }
     
     fileprivate func addPlayer() {
-        tire.position = CGPoint(x: 0, y: 0)
-        addChild(tire)
+        car.position = CGPoint(x: 0, y: 0)
+        addChild(car)
+        car.configurateJoints(scene: self)
     }
     
     fileprivate func updateCamera() {
-        let carFrame = tire.calculateAccumulatedFrame()
+        let carFrame = car.calculateAccumulatedFrame()
         let cameraPositionX = carFrame.origin.x + carFrame.width / 2
         let cameraPositiony = carFrame.origin.y + carFrame.height / 2
         camera?.position = CGPoint(x: cameraPositionX, y: cameraPositiony)

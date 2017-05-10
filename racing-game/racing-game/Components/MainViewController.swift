@@ -9,19 +9,15 @@
 import UIKit
 import SpriteKit
 
-public enum Direction: UInt32 {
-    
-    case left = 0x1
-    case right = 0x2
-    case down = 0x4
-    case up = 0x8
-    
-}
-
-public enum Directions: String {
+public enum Turn: String {
     
     case left = "left"
     case right = "right"
+    
+}
+
+public enum Direction: String {
+    
     case down = "down"
     case up = "up"
     
@@ -46,6 +42,7 @@ public class MainViewController: UIViewController {
         skView.ignoresSiblingOrder = true
         skView.showsFPS = true
         skView.showsNodeCount = true
+        skView.showsPhysics = true
         
         scene = MainScene(size: view.bounds.size)
         scene.scaleMode = .resizeFill

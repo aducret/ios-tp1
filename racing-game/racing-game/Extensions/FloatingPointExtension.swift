@@ -12,4 +12,3 @@ public extension FloatingPoint {
     public var radiansToDegrees: Self { return self * 180 / .pi }
     
 }
-
