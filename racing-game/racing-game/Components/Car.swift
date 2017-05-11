@@ -11,15 +11,6 @@ import UIKit
 
 public class Car: SKNode {
     
-    public var velocityRestriction: CGFloat = 0.0 {
-        didSet {
-            tire1.velocityRestriction = velocityRestriction
-            tire2.velocityRestriction = velocityRestriction
-            tire3.velocityRestriction = velocityRestriction
-            tire4.velocityRestriction = velocityRestriction
-        }
-    }
-    
     fileprivate let body: Body
     fileprivate let tire1 = Tire(size: CGSize(width: 10, height: 20))
     fileprivate let tire2 = Tire(size: CGSize(width: 10, height: 20))
@@ -73,24 +64,24 @@ public class Car: SKNode {
 fileprivate extension Car {
     
     fileprivate func addChilds() {
-        body.zPosition = 2
+        body.zPosition = 3
         body.position = CGPoint(x: 10, y: 35)
         addChild(body)
         
         tire1.position = CGPoint(x: -5, y: 60)
-        tire1.zPosition = 1
+        tire1.zPosition = 2
         addChild(tire1)
         
         tire2.position = CGPoint(x: 25, y: 60)
-        tire2.zPosition = 1
+        tire2.zPosition = 2
         addChild(tire2)
         
         tire3.position = CGPoint(x: -5, y: 5)
-        tire3.zPosition = 1
+        tire3.zPosition = 2
         addChild(tire3)
         
         tire4.position = CGPoint(x: 25, y: 5)
-        tire4.zPosition = 1
+        tire4.zPosition = 2
         addChild(tire4)
     }
     

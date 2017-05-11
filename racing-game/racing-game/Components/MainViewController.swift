@@ -25,9 +25,11 @@ public enum Direction: String {
 
 public struct PhysicsCategory {
     
-    static let Car: UInt32 = 0x1
-    static let Grass: UInt32 = 0x2
-    static let Wall: UInt32 = 0x4
+    static let Tire: UInt32 = 1
+    static let Grass: UInt32 = 2
+    static let Wall: UInt32 = 4
+    static let FinishLine: UInt32 = 8
+    static let Body: UInt32 = 16
     
 }
 
@@ -49,9 +51,9 @@ public class MainViewController: UIViewController {
         let skView = SKView(frame: view.bounds)
         skView.ignoresSiblingOrder = true
         // This is just for debug
-//        skView.showsFPS = true
-//        skView.showsNodeCount = true
-//        skView.showsPhysics = true
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        skView.showsPhysics = true
         
         scene = MenuScene(fileNamed: "MenuScene")
         scene.scaleMode = .resizeFill

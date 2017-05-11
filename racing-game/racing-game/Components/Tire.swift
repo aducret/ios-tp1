@@ -19,9 +19,9 @@ public class Tire: SKSpriteNode {
     fileprivate let fowardDirection = CGVector(dx: 0, dy: 1)
     fileprivate let lateralDirection = CGVector(dx: 1, dy: 0)
     
-    fileprivate let maxForwardSpeed: CGFloat = 250
-    fileprivate let maxBackwardSpeed: CGFloat = -40
-    fileprivate let maxDriveForce: CGFloat = 300
+    fileprivate let maxForwardSpeed: CGFloat = 100000
+    fileprivate let maxBackwardSpeed: CGFloat = -50
+    fileprivate let maxDriveForce: CGFloat = 2500
     
     public init(size: CGSize) {
         let texture = SKTexture(imageNamed: "Tire")
@@ -50,7 +50,7 @@ public class Tire: SKSpriteNode {
         
         let force: CGFloat
         if currentSpeed < desiredSpeed {
-            force = maxDriveForce * (1.0 - velocityRestriction) * 10
+            force = maxDriveForce * (1.0 - velocityRestriction)
         } else if (currentSpeed > desiredSpeed) {
             force = -maxDriveForce * (1.0 - velocityRestriction)
         } else {
@@ -85,7 +85,7 @@ public class Tire: SKSpriteNode {
         
         let forwardVelocity = getForwardVelocity()
         let forwardSpeed = forwardVelocity.module()
-        let dragMagnitude = -2 * forwardSpeed
+        let dragMagnitude = -0.25 * forwardSpeed
         let drag = forwardVelocity.scale(dragMagnitude)
         physicsBody.applyForce(drag)
     }
@@ -99,7 +99,7 @@ fileprivate extension Tire {
         physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.mass = 5
         physicsBody?.affectedByGravity = false
-        physicsBody?.categoryBitMask = PhysicsCategory.Car
+        physicsBody?.categoryBitMask = PhysicsCategory.Tire
         physicsBody?.contactTestBitMask = PhysicsCategory.Grass
         physicsBody?.collisionBitMask = PhysicsCategory.Wall
     }

@@ -31,8 +31,8 @@ fileprivate extension Body {
         physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.mass = 5
         physicsBody?.affectedByGravity = false
-        physicsBody?.categoryBitMask = PhysicsCategory.Car
-        physicsBody?.contactTestBitMask = PhysicsCategory.Grass
+        physicsBody?.categoryBitMask = PhysicsCategory.Body
+        physicsBody?.contactTestBitMask = PhysicsCategory.FinishLine
         physicsBody?.collisionBitMask = PhysicsCategory.Wall
     }
     

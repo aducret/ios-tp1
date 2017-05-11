@@ -13,6 +13,8 @@ import Foundation
 
 public class MainScene: SKScene, SKPhysicsContactDelegate {
     
+    fileprivate var laps: Double = 0.0
+    
     fileprivate let car = Car(color: .red)
     
     fileprivate var direction: Direction? = .none
@@ -22,7 +24,8 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
     fileprivate let rightButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Right"), size: CGSize(width: 40, height: 40))
     fileprivate let upButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Up"), size: CGSize(width: 40, height: 40))
     fileprivate let downButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Down"), size: CGSize(width: 40, height: 40))
-    fileprivate let time = SKLabelNode(fontNamed: "Apple Symbols")
+    fileprivate let timeLabel = SKLabelNode(fontNamed: "Apple Symbols")
+    fileprivate let lapsLabel = SKLabelNode(fontNamed: "Apple Symbols")
     
     fileprivate let startTime = CFAbsoluteTimeGetCurrent()
     fileprivate var endTime = CFAbsoluteTimeGetCurrent()
@@ -36,10 +39,40 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
         addPlayer()
         addCamera()
         addControls()
+        
+        children
+            .filter { $0.name == "Wall" }
+            .forEach {
+                $0.physicsBody = SKPhysicsBody(rectangleOf: $0.frame.size)
+                $0.physicsBody?.isDynamic = false
+                $0.physicsBody?.categoryBitMask = PhysicsCategory.Wall
+                $0.physicsBody?.contactTestBitMask = 0
+                $0.physicsBody?.collisionBitMask = 0
+            }
+        
+        children
+            .filter { $0.name == "Grass" }
+            .forEach {
+                $0.physicsBody = SKPhysicsBody(rectangleOf: $0.frame.size)
+                $0.physicsBody?.isDynamic = false
+                $0.physicsBody?.categoryBitMask = PhysicsCategory.Grass
+                $0.physicsBody?.contactTestBitMask = PhysicsCategory.Tire
+                $0.physicsBody?.collisionBitMask = 0
+            }
+        
+        children
+            .filter { $0.name == "FinishLine" }
+            .forEach {
+                $0.physicsBody = SKPhysicsBody(rectangleOf: $0.frame.size)
+                $0.physicsBody?.isDynamic = false
+                $0.physicsBody?.categoryBitMask = PhysicsCategory.FinishLine
+                $0.physicsBody?.contactTestBitMask = PhysicsCategory.Body
+                $0.physicsBody?.collisionBitMask = 0
+            }
     }
     
+    // Hack to avoid weird behavior.
     var a = 0
-    
     public override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
         
@@ -49,6 +82,10 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
         }
         
         car.updatePhysics(direction: direction, turn: turn)
+        
+        if laps == 5 {
+            view?.isPaused = true
+        }
     }
     
     public override func didFinishUpdate() {
@@ -89,9 +126,9 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
         
-        if ((firstBody.categoryBitMask & PhysicsCategory.Car != 0) && (secondBody.categoryBitMask & PhysicsCategory.Grass != 0)) {
-            if let car = firstBody.node as? Car, let _ = secondBody.node as? Grass {
-                car.velocityRestriction = 0.5
+        if ((firstBody.categoryBitMask & PhysicsCategory.Tire != 0) && (secondBody.categoryBitMask & PhysicsCategory.Grass != 0)) {
+            if let tire = firstBody.node as? Tire {
+                tire.velocityRestriction = 0.9
             }
         }
     }
@@ -107,10 +144,14 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
         
-        if ((firstBody.categoryBitMask & PhysicsCategory.Car != 0) && (secondBody.categoryBitMask & PhysicsCategory.Grass != 0)) {
-            if let car = firstBody.node as? Car {
-                car.velocityRestriction = 0.0
+        if ((firstBody.categoryBitMask & PhysicsCategory.Tire != 0) && (secondBody.categoryBitMask & PhysicsCategory.Grass != 0)) {
+            if let tire = firstBody.node as? Tire {
+                tire.velocityRestriction = 0
             }
+        }
+        
+        if ((secondBody.categoryBitMask & PhysicsCategory.Body != 0) && (firstBody.categoryBitMask & PhysicsCategory.FinishLine != 0)) {
+            laps += 0.5
         }
     }
     
@@ -142,7 +183,9 @@ fileprivate extension MainScene {
         camera?.position = CGPoint(x: cameraPositionX, y: cameraPositiony)
         
         endTime = CFAbsoluteTimeGetCurrent()
-        time.text = String(format: "%.2fs", endTime - startTime)
+        timeLabel.text = String(format: "%.2fs", endTime - startTime)
+        
+        lapsLabel.text = String(format: "Lap: %.0f", laps)
     }
     
     fileprivate func addCamera() {
@@ -175,10 +218,16 @@ fileprivate extension MainScene {
         leftButton.zPosition = 100
         camera.addChild(leftButton)
         
-        time.text = "0.00s"
-        time.zPosition = 100
-        time.position = CGPoint(x: 0, y: size.height / 2 - time.frame.height)
-        camera.addChild(time)
+        timeLabel.text = "0.00s"
+        timeLabel.zPosition = 100
+        timeLabel.position = CGPoint(x: 0, y: size.height / 2 - timeLabel.frame.height)
+        camera.addChild(timeLabel)
+        
+        lapsLabel.text = String(format: "Lap: %d", laps)
+        lapsLabel.zPosition = 100
+        lapsLabel.fontSize = 17
+        lapsLabel.position = CGPoint(x: size.width / 2 - timeLabel.frame.width + 20, y: size.height / 2 - timeLabel.frame.height)
+        camera.addChild(lapsLabel)
     }
     
 }

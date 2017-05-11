@@ -33,4 +33,8 @@ public extension CGVector {
         return sqrt(dx * dx + dy * dy)
     }
     
+    public func sum(_ constant: CGFloat) -> CGVector {
+        return CGVector(dx: dx + constant, dy: dy + constant)
+    }
+    
 }

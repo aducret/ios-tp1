@@ -1,5 +1,5 @@
 //
-//  Grass.swift
+//  Wall.swift
 //  racing-game
 //
 //  Created by Argentino Ducret on 5/11/17.
@@ -9,8 +9,8 @@
 import SpriteKit
 import UIKit
 
-public class Grass: SKSpriteNode {
-
+public class Wall: SKSpriteNode {
+    
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         configuratePhysicsBody()
@@ -19,13 +19,13 @@ public class Grass: SKSpriteNode {
 }
 
 // MARK: - Private Methods
-fileprivate extension Grass {
+fileprivate extension Wall {
     
     fileprivate func configuratePhysicsBody() {
         physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.isDynamic = false
-        physicsBody?.categoryBitMask = PhysicsCategory.Grass
-        physicsBody?.contactTestBitMask = PhysicsCategory.Tire
+        physicsBody?.categoryBitMask = PhysicsCategory.Wall
+        physicsBody?.contactTestBitMask = 0
         physicsBody?.collisionBitMask = 0
     }
     
