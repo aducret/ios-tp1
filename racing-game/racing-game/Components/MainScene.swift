@@ -22,6 +22,10 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
     fileprivate let rightButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Right"), size: CGSize(width: 40, height: 40))
     fileprivate let upButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Up"), size: CGSize(width: 40, height: 40))
     fileprivate let downButton = SKSpriteNode(texture: SKTexture(imageNamed: "Arrow-Down"), size: CGSize(width: 40, height: 40))
+    fileprivate let time = SKLabelNode(fontNamed: "Apple Symbols")
+    
+    fileprivate let startTime = CFAbsoluteTimeGetCurrent()
+    fileprivate var endTime = CFAbsoluteTimeGetCurrent()
     
     public override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -55,18 +59,16 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touches
             .map { $0.location(in: self) }
+            .map { nodes(at: $0) }
             .forEach {
-                // We subtract one to touchedNodes.count because the camera is always touched and we don't contemplate this case.
-                // We check if the touched node is only one direction button.
-                let touchedNodes = nodes(at: $0)
-                guard touchedNodes.count - 1 == 1 else { return }
-                
-                if let directionPressed = Direction(rawValue: touchedNodes[0].name ?? "") {
-                    direction = directionPressed
-                }
-                
-                if let turnPressed = Turn(rawValue: touchedNodes[0].name ?? "") {
-                    turn = turnPressed
+                $0.forEach {
+                    if let directionPressed = Direction(rawValue: $0.name ?? "") {
+                        direction = directionPressed
+                    }
+                    
+                    if let turnPressed = Turn(rawValue: $0.name ?? "") {
+                        turn = turnPressed
+                    }
                 }
             }
     }
@@ -77,7 +79,39 @@ public class MainScene: SKScene, SKPhysicsContactDelegate {
     }
     
     public func didBegin(_ contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
         
+        if ((firstBody.categoryBitMask & PhysicsCategory.Car != 0) && (secondBody.categoryBitMask & PhysicsCategory.Grass != 0)) {
+            if let car = firstBody.node as? Car, let _ = secondBody.node as? Grass {
+                car.velocityRestriction = 0.5
+            }
+        }
+    }
+    
+    public  func didEnd(_ contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        if ((firstBody.categoryBitMask & PhysicsCategory.Car != 0) && (secondBody.categoryBitMask & PhysicsCategory.Grass != 0)) {
+            if let car = firstBody.node as? Car {
+                car.velocityRestriction = 0.0
+            }
+        }
     }
     
 }
@@ -106,6 +140,9 @@ fileprivate extension MainScene {
         let cameraPositionX = carFrame.origin.x + carFrame.width / 2
         let cameraPositiony = carFrame.origin.y + carFrame.height / 2
         camera?.position = CGPoint(x: cameraPositionX, y: cameraPositiony)
+        
+        endTime = CFAbsoluteTimeGetCurrent()
+        time.text = String(format: "%.2fs", endTime - startTime)
     }
     
     fileprivate func addCamera() {
@@ -117,21 +154,31 @@ fileprivate extension MainScene {
     fileprivate func addControls() {
         guard let camera = camera else { return }
         
-        upButton.position = CGPoint(x: 0, y: -size.height / 2 + upButton.size.height / 2 + 35)
-        upButton.name = "up"
-        camera.addChild(upButton)
+        // This is just for debug.
+//        upButton.position = CGPoint(x: 0, y: -size.height / 2 + upButton.size.height / 2 + 35)
+//        upButton.name = "up"
+//        upButton.zPosition = 100
+//        camera.addChild(upButton)
         
         downButton.position = CGPoint(x: 0, y: -size.height / 2 + downButton.size.height / 2)
         downButton.name = "down"
+        downButton.zPosition = 100
         camera.addChild(downButton)
         
-        rightButton.position = CGPoint(x: rightButton.size.width / 2 + 25, y: -size.height / 2 + rightButton.size.height / 2)
+        rightButton.position = CGPoint(x: size.width / 2 - 25, y: -size.height / 2 + rightButton.size.height / 2)
         rightButton.name = "right"
+        rightButton.zPosition = 100
         camera.addChild(rightButton)
         
-        leftButton.position = CGPoint(x: -leftButton.size.width / 2 - 25, y: -size.height / 2 + leftButton.size.height / 2)
+        leftButton.position = CGPoint(x: -size.width / 2 + 25, y: -size.height / 2 + leftButton.size.height / 2)
         leftButton.name = "left"
+        leftButton.zPosition = 100
         camera.addChild(leftButton)
+        
+        time.text = "0.00s"
+        time.zPosition = 100
+        time.position = CGPoint(x: 0, y: size.height / 2 - time.frame.height)
+        camera.addChild(time)
     }
     
 }

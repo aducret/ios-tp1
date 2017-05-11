@@ -11,32 +11,27 @@ import UIKit
 
 public class Car: SKNode {
     
-    public let body: Body
+    public var velocityRestriction: CGFloat = 0.0 {
+        didSet {
+            tire1.velocityRestriction = velocityRestriction
+            tire2.velocityRestriction = velocityRestriction
+            tire3.velocityRestriction = velocityRestriction
+            tire4.velocityRestriction = velocityRestriction
+        }
+    }
     
-    public let tire1 = Tire(texture: nil, color: .brown, size: CGSize(width: 10, height: 20))
-    public let tire2 = Tire(texture: nil, color: .brown, size: CGSize(width: 10, height: 20))
-    public let tire3 = Tire(texture: nil, color: .brown, size: CGSize(width: 10, height: 20))
-    public let tire4 = Tire(texture: nil, color: .brown, size: CGSize(width: 10, height: 20))
+    fileprivate let body: Body
+    fileprivate let tire1 = Tire(size: CGSize(width: 10, height: 20))
+    fileprivate let tire2 = Tire(size: CGSize(width: 10, height: 20))
+    fileprivate let tire3 = Tire(size: CGSize(width: 10, height: 20))
+    fileprivate let tire4 = Tire(size: CGSize(width: 10, height: 20))
     
     public init(color: UIColor) {
-        body = Body(color: color)
+        body = Body(size: CGSize(width: 40, height: 70))
         
         super.init()
-        
-        body.zPosition = 1
-        addChild(body)
-        
-        tire1.position = CGPoint(x: -5, y: 60)
-        addChild(tire1)
-        
-        tire2.position = CGPoint(x: 25, y: 60)
-        addChild(tire2)
-        
-        tire3.position = CGPoint(x: -5, y: 5)
-        addChild(tire3)
-        
-        tire4.position = CGPoint(x: 25, y: 5)
-        addChild(tire4)
+
+        addChilds()
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -51,11 +46,19 @@ public class Car: SKNode {
     }
     
     public func configurateJoints(scene: SKScene) {
-        var springJoint = SKPhysicsJointSpring.joint(withBodyA: body.physicsBody!, bodyB: tire1.physicsBody!, anchorA: tire1.position, anchorB: tire1.position)
-        scene.physicsWorld.add(springJoint)
+        var pinJoint = SKPhysicsJointPin.joint(withBodyA: body.physicsBody!, bodyB: tire1.physicsBody!, anchor: tire1.position)
+        pinJoint.shouldEnableLimits = true
+        pinJoint.lowerAngleLimit = CGFloat(-45.degreesToRadians)
+        pinJoint.upperAngleLimit = CGFloat(45.degreesToRadians)
+        pinJoint.frictionTorque = 0.2
+        scene.physicsWorld.add(pinJoint)
         
-        springJoint = SKPhysicsJointSpring.joint(withBodyA: body.physicsBody!, bodyB: tire2.physicsBody!, anchorA: tire2.position, anchorB: tire2.position)
-        scene.physicsWorld.add(springJoint)
+        pinJoint = SKPhysicsJointPin.joint(withBodyA: body.physicsBody!, bodyB: tire2.physicsBody!, anchor: tire2.position)
+        pinJoint.shouldEnableLimits = true
+        pinJoint.lowerAngleLimit = CGFloat(-45.degreesToRadians)
+        pinJoint.upperAngleLimit = CGFloat(45.degreesToRadians)
+        pinJoint.frictionTorque = 0.2
+        scene.physicsWorld.add(pinJoint)
         
         var fixedJoint = SKPhysicsJointFixed.joint(withBodyA: body.physicsBody!, bodyB: tire3.physicsBody!, anchor: tire3.position)
         scene.physicsWorld.add(fixedJoint)
@@ -68,6 +71,28 @@ public class Car: SKNode {
 
 // MARK: - Private Methods
 fileprivate extension Car {
+    
+    fileprivate func addChilds() {
+        body.zPosition = 2
+        body.position = CGPoint(x: 10, y: 35)
+        addChild(body)
+        
+        tire1.position = CGPoint(x: -5, y: 60)
+        tire1.zPosition = 1
+        addChild(tire1)
+        
+        tire2.position = CGPoint(x: 25, y: 60)
+        tire2.zPosition = 1
+        addChild(tire2)
+        
+        tire3.position = CGPoint(x: -5, y: 5)
+        tire3.zPosition = 1
+        addChild(tire3)
+        
+        tire4.position = CGPoint(x: 25, y: 5)
+        tire4.zPosition = 1
+        addChild(tire4)
+    }
     
     fileprivate func updateFrontalTirePhysics(tire: Tire, direction: Direction?, turn: Turn?) {
         tire.updateFriction()

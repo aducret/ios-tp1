@@ -9,12 +9,11 @@
 import SpriteKit
 import UIKit
 
-public class Body: SKShapeNode {
+public class Body: SKSpriteNode {
     
-    public init(color: UIColor) {
-        super.init()
-        path = createCarBodyPath()
-        fillColor = color
+    public init(size: CGSize) {
+        let texture = SKTexture(imageNamed: "car")
+        super.init(texture: texture, color: .clear, size: size)
         
         configurePhysicsBody(with: frame.size)
     }
@@ -29,25 +28,12 @@ public class Body: SKShapeNode {
 fileprivate extension Body {
     
     fileprivate func configurePhysicsBody(with size: CGSize) {
-        physicsBody = SKPhysicsBody(polygonFrom: createCarBodyPath())
+        physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.mass = 5
         physicsBody?.affectedByGravity = false
+        physicsBody?.categoryBitMask = PhysicsCategory.Car
+        physicsBody?.contactTestBitMask = PhysicsCategory.Grass
+        physicsBody?.collisionBitMask = PhysicsCategory.Wall
     }
     
-}
-
-fileprivate func createCarBodyPath() -> CGPath {
-    let path = CGMutablePath()
-    path.move(to: CGPoint(x: 0, y: 0))
-    path.addLine(to: CGPoint(x: 20, y: 0))
-    path.addLine(to: CGPoint(x: 30, y: 15))
-    path.addLine(to: CGPoint(x: 25, y: 40))
-    path.addLine(to: CGPoint(x: 15, y: 70))
-    path.addLine(to: CGPoint(x: 5, y: 70))
-    path.addLine(to: CGPoint(x: -5, y: 40))
-    path.addLine(to: CGPoint(x: -10, y: 15))
-    path.addLine(to: CGPoint(x: 0, y: 0))
-    path.closeSubpath()
-    
-    return path
 }

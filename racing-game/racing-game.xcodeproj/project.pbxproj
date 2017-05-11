@@ -12,6 +12,10 @@
 		464217FE1EC3977F004CC36E /* FloatingPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464217FD1EC3977F004CC36E /* FloatingPointExtension.swift */; };
 		464218001EC399C9004CC36E /* Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464217FF1EC399C9004CC36E /* Body.swift */; };
 		464218021EC3BC9F004CC36E /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464218011EC3BC9F004CC36E /* Car.swift */; };
+		467083F61EC483470076542D /* MainScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 467083F51EC483470076542D /* MainScene.sks */; };
+		467083F81EC4A1470076542D /* Grass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467083F71EC4A1470076542D /* Grass.swift */; };
+		467083FA1EC4B60C0076542D /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 467083F91EC4B60C0076542D /* MenuScene.sks */; };
+		467083FC1EC4B6EC0076542D /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467083FB1EC4B6EC0076542D /* MenuScene.swift */; };
 		46759D391EB393280042580D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46759D381EB393280042580D /* AppDelegate.swift */; };
 		46759D441EB393280042580D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 46759D421EB393280042580D /* Main.storyboard */; };
 		46759D461EB393290042580D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46759D451EB393290042580D /* Assets.xcassets */; };
@@ -27,6 +31,10 @@
 		464217FD1EC3977F004CC36E /* FloatingPointExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingPointExtension.swift; sourceTree = "<group>"; };
 		464217FF1EC399C9004CC36E /* Body.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Body.swift; sourceTree = "<group>"; };
 		464218011EC3BC9F004CC36E /* Car.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
+		467083F51EC483470076542D /* MainScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainScene.sks; sourceTree = "<group>"; };
+		467083F71EC4A1470076542D /* Grass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grass.swift; sourceTree = "<group>"; };
+		467083F91EC4B60C0076542D /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
+		467083FB1EC4B6EC0076542D /* MenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		46759D351EB393280042580D /* racing-game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "racing-game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		46759D381EB393280042580D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46759D431EB393280042580D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -59,6 +67,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		467083F41EC4832E0076542D /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				467083F51EC483470076542D /* MainScene.sks */,
+				467083F91EC4B60C0076542D /* MenuScene.sks */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
 		46759D2C1EB393280042580D = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +97,7 @@
 			children = (
 				46004E121EC0FCDF00C829A2 /* Extensions */,
 				46C503F91EB8C97000554FF0 /* Components */,
+				467083F41EC4832E0076542D /* Scenes */,
 				46759D381EB393280042580D /* AppDelegate.swift */,
 				46759D451EB393290042580D /* Assets.xcassets */,
 				46759D421EB393280042580D /* Main.storyboard */,
@@ -93,10 +111,12 @@
 			isa = PBXGroup;
 			children = (
 				46C503FA1EB8C98200554FF0 /* MainViewController.swift */,
+				467083FB1EC4B6EC0076542D /* MenuScene.swift */,
 				46C503FE1EB8C9FF00554FF0 /* MainScene.swift */,
 				46C503FC1EB8C99400554FF0 /* Tire.swift */,
 				464217FF1EC399C9004CC36E /* Body.swift */,
 				464218011EC3BC9F004CC36E /* Car.swift */,
+				467083F71EC4A1470076542D /* Grass.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -164,6 +184,8 @@
 				46759D441EB393280042580D /* Main.storyboard in Resources */,
 				46759D461EB393290042580D /* Assets.xcassets in Resources */,
 				46759D491EB393290042580D /* LaunchScreen.storyboard in Resources */,
+				467083FA1EC4B60C0076542D /* MenuScene.sks in Resources */,
+				467083F61EC483470076542D /* MainScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,8 +198,10 @@
 			files = (
 				46C503FB1EB8C98200554FF0 /* MainViewController.swift in Sources */,
 				46004E141EC0FCEF00C829A2 /* CGVectorExtension.swift in Sources */,
+				467083FC1EC4B6EC0076542D /* MenuScene.swift in Sources */,
 				46C503FF1EB8C9FF00554FF0 /* MainScene.swift in Sources */,
 				464218001EC399C9004CC36E /* Body.swift in Sources */,
+				467083F81EC4A1470076542D /* Grass.swift in Sources */,
 				46759D391EB393280042580D /* AppDelegate.swift in Sources */,
 				464218021EC3BC9F004CC36E /* Car.swift in Sources */,
 				46C503FD1EB8C99400554FF0 /* Tire.swift in Sources */,

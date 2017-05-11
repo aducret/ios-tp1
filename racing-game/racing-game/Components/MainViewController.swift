@@ -23,9 +23,17 @@ public enum Direction: String {
     
 }
 
+public struct PhysicsCategory {
+    
+    static let Car: UInt32 = 0x1
+    static let Grass: UInt32 = 0x2
+    static let Wall: UInt32 = 0x4
+    
+}
+
 public class MainViewController: UIViewController {
     
-    fileprivate var scene: MainScene!
+    fileprivate var scene: MenuScene!
     
     public override var prefersStatusBarHidden: Bool {
         return true
@@ -40,11 +48,12 @@ public class MainViewController: UIViewController {
         
         let skView = SKView(frame: view.bounds)
         skView.ignoresSiblingOrder = true
-        skView.showsFPS = true
-        skView.showsNodeCount = true
-        skView.showsPhysics = true
+        // This is just for debug
+//        skView.showsFPS = true
+//        skView.showsNodeCount = true
+//        skView.showsPhysics = true
         
-        scene = MainScene(size: view.bounds.size)
+        scene = MenuScene(fileNamed: "MenuScene")
         scene.scaleMode = .resizeFill
         skView.presentScene(scene)
         

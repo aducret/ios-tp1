@@ -11,6 +11,8 @@ import UIKit
 
 public class Tire: SKSpriteNode {
     
+    public var velocityRestriction: CGFloat = 0.0
+    
     fileprivate static let MinAngle: CGFloat = -45
     fileprivate static let MaxAngle: CGFloat = 45
     
@@ -21,8 +23,9 @@ public class Tire: SKSpriteNode {
     fileprivate let maxBackwardSpeed: CGFloat = -40
     fileprivate let maxDriveForce: CGFloat = 300
     
-    public override init(texture: SKTexture? = nil, color: UIColor, size: CGSize) {
-        super.init(texture: texture, color: color, size: size)
+    public init(size: CGSize) {
+        let texture = SKTexture(imageNamed: "Tire")
+        super.init(texture: texture, color: .clear, size: size)
         
         configurePhysicsBody(with: frame.size)
     }
@@ -47,20 +50,19 @@ public class Tire: SKSpriteNode {
         
         let force: CGFloat
         if currentSpeed < desiredSpeed {
-            force = maxDriveForce
+            force = maxDriveForce * (1.0 - velocityRestriction) * 10
         } else if (currentSpeed > desiredSpeed) {
-            force = -maxDriveForce
+            force = -maxDriveForce * (1.0 - velocityRestriction)
         } else {
             return
         }
 
-        physicsBody.applyForce(currentForwardNormal.scale(force * 10))
+        physicsBody.applyForce(currentForwardNormal.scale(force))
     }
     
     public func updateTurn(turn: Turn, parentRotation: CGFloat) {
         guard let physicsBody = physicsBody else { return }
-        guard zRotation < parentRotation + CGFloat(45.degreesToRadians) && zRotation > parentRotation - CGFloat(45.degreesToRadians) else { return }
-    
+        
         let desiredTorque: CGFloat
         switch turn {
         case .left:
@@ -97,6 +99,9 @@ fileprivate extension Tire {
         physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.mass = 5
         physicsBody?.affectedByGravity = false
+        physicsBody?.categoryBitMask = PhysicsCategory.Car
+        physicsBody?.contactTestBitMask = PhysicsCategory.Grass
+        physicsBody?.collisionBitMask = PhysicsCategory.Wall
     }
         
     fileprivate func getForwardVelocity() -> CGVector {
